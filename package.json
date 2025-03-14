@@ -1,0 +1,25 @@
+{
+  "name": "k6-typescript-loadtesting",
+  "version": "1.0.0",
+  "description": "K6 loadtesting portfolio project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ejmenkhorst/k6-typescript-loadtesting.git"
+  },
+  "keywords": [
+    "Grafana",
+    "K6",
+    "TypeScript",
+    "CouchDB"
+  ],
+  "author": "Erik Menkhorst",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ejmenkhorst/k6-typescript-loadtesting/issues"
+  },
+  "homepage": "https://github.com/ejmenkhorst/k6-typescript-loadtesting#readme"
+}
