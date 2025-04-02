@@ -17,14 +17,9 @@ Portfolio project Grafana K6 load testing with TypeScript.
 
 ## Test Data
 
-## Execution order when executing Docker-Compose up
-
-- chmod +x init-scripts/initial-setup.sh
-- curl -X PUT -u admin:A24cvmri http://localhost:5984/_users -> create _user database via curl command
-- curl -X GET -u admin:A24cvmri http://localhost:5984/_up
 ### CouchDB web UI
 
-v
+
 ### Access the services:
 
 - CouchDB UI: Access the CouchDB web interface at http://localhost:5984.

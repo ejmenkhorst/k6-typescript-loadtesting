@@ -2,7 +2,7 @@
 # initial-setup.sh
 set -x  # Enable debug mode
 
-# Source the configuration file
+# Source the configuration and helper functions shell script
 source ./config.sh
 source helpers.sh
 
@@ -46,7 +46,3 @@ create_database
 insert_documents
 
 echo 'Initialisation setup completed.'
-
-# Execute the provided command (e.g., start CouchDB)
-echo "Executing provided command: $@"
-exec "$@"
