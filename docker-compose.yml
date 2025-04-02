@@ -1,0 +1,61 @@
+services:
+  couchdb-master:
+    image: couchdb:2.3.1
+    restart: always
+    ports:
+      - "5984:5984"
+    environment:
+      - COUCHDB_USER=admin
+      - COUCHDB_PASSWORD=A24cvmri
+    volumes:
+      - ./db/master:/opt/couchdb/data
+      - ./config/master/local.ini:/opt/couchdb/etc/local.ini
+    networks:
+      - couchdb-network
+
+  init_couchdb:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: init_couchdb
+    depends_on:
+      - couchdb-master
+    restart: "no"
+    networks:
+      - couchdb-network
+
+#  couchdb-car1:
+#    image: couchdb:2.3.1
+#    restart: always
+#    ports:
+#      - "5985:5984"
+#    environment:
+#      - COUCHDB_USER=admin
+#      - COUCHDB_PASSWORD=9VQhWrfW
+#    volumes:
+#      - ./db/car1:/opt/couchdb/data
+#      - ./config/car1/local.ini:/opt/couchdb/etc/local.ini
+#    depends_on:
+#      - couchdb-master
+#    networks:
+#      - couchdb-network
+#
+#  couchdb-car2:
+#    image: couchdb:2.3.1
+#    restart: always
+#    ports:
+#      - "5986:5984"
+#    environment:
+#      - COUCHDB_USER=admin
+#      - COUCHDB_PASSWORD=ouPFQ6mj
+#    volumes:
+#      - ./db/car2:/opt/couchdb/data
+#      - ./config/car2/local.ini:/opt/couchdb/etc/local.ini
+#    depends_on:
+#      - couchdb-master
+#    networks:
+#      - couchdb-network
+
+networks:
+  couchdb-network:
+    driver: bridge
