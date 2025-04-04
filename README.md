@@ -4,6 +4,12 @@ Portfolio project Grafana K6 load testing with TypeScript.
 
 ## project setup
 
+### folder structure
+
+- config folder: contains ini configuration files for couch-db instances
+- db folder: contains the database data -> remember to empty it manually if you want to start from scratch
+- init-scripts folder: contains the bash shell scripts to setup all the databases and replication settings
+
 ### setup Guide
 
 1. **Build Docker Image For Executing Shell Scripts:**
@@ -18,6 +24,7 @@ Portfolio project Grafana K6 load testing with TypeScript.
    ```bash
    docker-compose up --build -d
    ```
+
 
 ### init-scripts
 
