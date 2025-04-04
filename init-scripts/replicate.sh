@@ -9,7 +9,7 @@ add_replication_to_replicator() {
   local target=$2
   local continuous=$3
 
-  curl -X POST "http://admin:A24cvmri@couchdb-master:5984/_replicator" \
+  curl -X POST "http://$DB_USER:$DB_PASSWORD_MASTER@$DB_HOST_MASTER:$DB_PORT_MASTER/_replicator" \
     -H "Content-Type: application/json" \
     -d "{
       \"source\": \"$source\",
@@ -23,7 +23,7 @@ add_replication_to_replicator() {
 start_replication_setup() {
   # Create _replicatorDB for couchdb-master if this does not exist
   if ! curl -u "$DB_USER:$DB_PASSWORD_MASTER" -s -o /dev/null -w "%{http_code}" "http://$DB_HOST_MASTER:$DB_PORT_MASTER/_replicator" | grep -q "200"; then
-    echo "_replicator database does not exist. Creating _replicator..."
+    echo "_replicator database does not exist. Creating _replicator database..."
     curl -u "$DB_USER:$DB_PASSWORD_MASTER" -X PUT "http://$DB_HOST_MASTER:$DB_PORT_MASTER/_replicator"
     echo "_replicator database created."
   else
