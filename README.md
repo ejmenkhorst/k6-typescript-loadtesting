@@ -4,11 +4,34 @@ Portfolio project Grafana K6 load testing with TypeScript.
 
 ## project setup
 
+This project is using several docker-containers to setup this project.
+It integrates Prometheus exporters with CouchDB instances, providing a clean and scalable monitoring solution.
+
+**prometheus exporters**  
+Benefits of This Approach:
+
+1. **Separation of Concerns**:
+
+   - The Prometheus exporters handle metrics conversion, keeping CouchDB instances lightweight.
+
+2. **Scalability**:
+
+   - Each CouchDB instance has its own exporter, making it easier to scale and monitor multiple instances.
+
+3. **Standardized Metrics**:
+
+   - The exporters provide a consistent Prometheus-compatible metrics format.
+
+4. **Security**:
+   - Prometheus does not need direct access to CouchDB credentials; it only communicates with the exporters.
+
 ### folder structure
 
 - config folder: contains ini configuration files for couch-db instances
 - db folder: contains the database data -> remember to empty it manually if you want to start from scratch
 - init-scripts folder: contains the bash shell scripts to setup all the databases and replication settings
+- grafana folder: contains the dashboards in code format for a consistent experience
+- prometheus folder: contains the settings
 
 ### setup Guide
 
@@ -24,7 +47,6 @@ Portfolio project Grafana K6 load testing with TypeScript.
    ```bash
    docker-compose up --build -d
    ```
-
 
 ### init-scripts
 
