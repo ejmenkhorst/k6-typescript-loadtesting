@@ -1,9 +1,10 @@
+# filepath: [dashboards.yml](http://_vscodecontentref_/1)
 apiVersion: 1
 
 providers:
-  - name: "default"
+  - name: "CouchDB Dashboards"
     orgId: 1
-    folder: ""
+    folder: "CouchDB"
     type: "file"
     disableDeletion: false
     editable: true
