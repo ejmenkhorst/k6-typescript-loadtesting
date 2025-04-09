@@ -107,3 +107,9 @@ The following paragraphs describe concise each scripts functions.
 1. **`add_replication_to_replicator`**: Adds a replication job to the `_replicator` database, specifying the source, target, and whether the replication is continuous.
 
 2. **`start_replication_setup`**: Ensures the `_replicator` database exists on the CouchDB master instance and sets up bidirectional replication between the master and car1/car2 databases.
+
+## Running K6 tests
+
+```bash
+npm run test:k6
+```

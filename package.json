@@ -4,7 +4,8 @@
   "description": "K6 loadtesting portfolio project",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc",
+    "test:k6": "k6 run dist/test.js"
   },
   "repository": {
     "type": "git",
@@ -22,6 +23,5 @@
     "url": "https://github.com/ejmenkhorst/k6-typescript-loadtesting/issues"
   },
   "homepage": "https://github.com/ejmenkhorst/k6-typescript-loadtesting#readme",
-  "dependencies": {
-  }
+  "dependencies": {}
 }
