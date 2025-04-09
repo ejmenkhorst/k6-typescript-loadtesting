@@ -1,3 +1,8 @@
-### AL ###
+### IDE ###
 .vscode/
 .idea
+
+### LOCAL CREATED COUCHDB INSTANCES WITH DATA ###
+db/master/
+db/car1/
+db/car2/

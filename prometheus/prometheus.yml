@@ -1,0 +1,18 @@
+global:
+  scrape_interval: 10s
+
+scrape_configs:
+  - job_name: "couchdb-master"
+    static_configs:
+      - targets:
+          - "prometheus-exporter-master:9984"
+
+  - job_name: "couchdb-car1"
+    static_configs:
+      - targets:
+          - "prometheus-exporter-car1:9984"
+
+  - job_name: "couchdb-car2"
+    static_configs:
+      - targets:
+          - "prometheus-exporter-car2:9984"

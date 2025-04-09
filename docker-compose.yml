@@ -1,0 +1,146 @@
+services:
+  couchdb-master:
+    image: couchdb:2.3.1
+    container_name: couchdb-master
+    restart: always
+    ports:
+      - "5984:5984"
+    environment:
+      - COUCHDB_USER=${DB_USER}
+      - COUCHDB_PASSWORD=${DB_PASSWORD_MASTER}
+    volumes:
+      - ./db/master:/opt/couchdb/data
+      - ./config/master/local.ini:/opt/couchdb/etc/local.ini
+    networks:
+      - couchdb-network
+
+  init_couchdb:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: init_couchdb
+    depends_on:
+      - couchdb-master
+      - couchdb-car1
+      - couchdb-car2
+    restart: "no"
+    volumes:
+      - ./.env:/app/.env
+    networks:
+      - couchdb-network
+    environment:
+      - COUCHDB_MASTER=${DB_MASTER}
+      - COUCHDB_CAR1=${DB_CAR1}
+      - COUCHDB_CAR2=${DB_CAR2}
+
+  couchdb-car1:
+    image: couchdb:2.3.1
+    container_name: couchdb-car1
+    restart: always
+    ports:
+      - "5985:5984"
+    environment:
+      - COUCHDB_USER=${DB_USER}
+      - COUCHDB_PASSWORD=${DB_PASSWORD_CAR1}
+    volumes:
+      - ./db/car1:/opt/couchdb/data
+      - ./config/car1/local.ini:/opt/couchdb/etc/local.ini
+    depends_on:
+      - couchdb-master
+    networks:
+      - couchdb-network
+
+  couchdb-car2:
+    image: couchdb:2.3.1
+    container_name: couchdb-car2
+    restart: always
+    ports:
+      - "5986:5984"
+    environment:
+      - COUCHDB_USER=${DB_USER}
+      - COUCHDB_PASSWORD=${DB_PASSWORD_CAR2}
+    volumes:
+      - ./db/car2:/opt/couchdb/data
+      - ./config/car2/local.ini:/opt/couchdb/etc/local.ini
+    depends_on:
+      - couchdb-master
+    networks:
+      - couchdb-network
+
+  prometheus-exporter-master:
+    image: gesellix/couchdb-prometheus-exporter:latest
+    container_name: prometheus-exporter-master
+    restart: always
+    ports:
+      - "9984:9984"
+    environment:
+      COUCHDB_URI: http://${DB_MASTER}
+      COUCHDB_USERNAME: ${DB_USER}
+      COUCHDB_PASSWORD: ${DB_PASSWORD_MASTER}
+    depends_on:
+      - couchdb-master
+    networks:
+      - couchdb-network
+
+  prometheus-exporter-car1:
+    image: gesellix/couchdb-prometheus-exporter:latest
+    container_name: prometheus-exporter-car1
+    restart: always
+    environment:
+      - COUCHDB_URI=http://${DB_USER}:${DB_PASSWORD_CAR1}@${DB_CAR1}
+      - COUCHDB_USER=${DB_USER}
+      - COUCHDB_PASSWORD=${DB_PASSWORD_CAR1}
+    ports:
+      - "9985:9984"
+    networks:
+      - couchdb-network
+
+  prometheus-exporter-car2:
+    image: gesellix/couchdb-prometheus-exporter:latest
+    container_name: prometheus-exporter-car2
+    restart: always
+    environment:
+      - COUCHDB_URI=http://${DB_USER}:${DB_PASSWORD_CAR2}@${DB_CAR2}
+      - COUCHDB_USER=${DB_USER}
+      - COUCHDB_PASSWORD=${DB_PASSWORD_CAR2}
+    ports:
+      - "9986:9984"
+    networks:
+      - couchdb-network
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    restart: always
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - couchdb-network
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=${GR_USER}
+      - GF_SECURITY_ADMIN_PASSWORD=${GR_PASSWORD}
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
+      - ./grafana/provisioning/dashboards:/var/lib/grafana/dashboards
+      - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+    depends_on:
+      - prometheus
+    networks:
+      - couchdb-network
+
+networks:
+  couchdb-network:
+    driver: bridge
+
+volumes:
+  grafana-data:

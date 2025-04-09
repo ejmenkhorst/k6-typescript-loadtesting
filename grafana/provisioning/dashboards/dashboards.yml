@@ -1,0 +1,12 @@
+# filepath: [dashboards.yml](http://_vscodecontentref_/1)
+apiVersion: 1
+
+providers:
+  - name: "CouchDB Dashboards"
+    orgId: 1
+    folder: "CouchDB"
+    type: "file"
+    disableDeletion: false
+    editable: true
+    options:
+      path: /var/lib/grafana/dashboards
