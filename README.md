@@ -110,6 +110,16 @@ The following paragraphs describe concise each scripts functions.
 
 ## Running K6 tests
 
+Invoke watch mode before making changes to test files
+
+### Enter watch mode when changing implementation of tests
+
+```bash
+npm run watch
+```
+
+### Execute testcases specified in [package.json](./package.json)
+
 ```bash
 npm run test:k6
 ```

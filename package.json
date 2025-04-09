@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
+    "watch": "tsc --watch",
     "test:k6": "k6 run dist/test.js"
   },
   "repository": {
