@@ -3,12 +3,20 @@
 set -e  # Exit immediately if a command exits with a non-zero status
 set -u  # Treat unset variables as an error
 set -o pipefail  # Catch errors in piped commands
-set -x  # Enable debug mode for troubleshooting
+#set -x  # Enable debug mode for troubleshooting
 
-# Source the configuration and helper functions
-source ./config.sh
+# Source the replication and helper functions
 source ./helpers.sh
 source ./replicate.sh
+
+# Load environment variables from the mounted .env file
+ENV_FILE="/app/.env"
+if [ -f "$ENV_FILE" ]; then
+  source "$ENV_FILE"
+else
+  echo ".env file not found at: $ENV_FILE!"
+  exit 1
+fi
 
 # Log the start of the script
 echo "Starting initial setup script..."
@@ -41,7 +49,7 @@ main() {
     exit 1
   fi
 
-  echo "Initialization setup completed successfully."
+  echo "Initialization and replication setup is completed successfully."
 }
 
 # Execute the main function

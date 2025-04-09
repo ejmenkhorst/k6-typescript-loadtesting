@@ -25,13 +25,34 @@ Benefits of This Approach:
 4. **Security**:
    - Prometheus does not need direct access to CouchDB credentials; it only communicates with the exporters.
 
+### Access the services:
+
+#### CouchDB Web Interface
+
+- Access the CouchDB web interface [couchdb-master](http://localhost:5984/_utils/#login).
+- Access the CouchDB web interface [car1](http://localhost:5985/_utils/#login).
+- Access the CouchDB web interface [car2](http://localhost:5986/_utils/#login).
+
+#### Prometheus UI
+
+The Prometheus configuration is managed by [prometheus.yml](./prometheus/prometheus.yml) and this makes sure that the prometheus-exporters are setup correctly by default.
+
+- Access Prometheus at http://localhost:9090.
+
+#### Grafana UI
+
+Grafana dashboards are for now configured for each specific database instance and can be found in the [dashboards folder](./grafana/provisioning/dashboards/)  
+The datasource configuration to prometheus can be found in the [datasources.yml](./grafana/provisioning/datasources/datasources.yml)
+
+- Access Grafana at http://localhost:3000 (default username: admin, password: admin).
+
 ### folder structure
 
 - config folder: contains ini configuration files for couch-db instances
 - db folder: contains the database data -> remember to empty it manually if you want to start from scratch
 - init-scripts folder: contains the bash shell scripts to setup all the databases and replication settings
-- grafana folder: contains the dashboards in code format for a consistent experience
-- prometheus folder: contains the settings
+- grafana folder: contains the dashboards and datasources as code for a consistent experience
+- prometheus folder: contains the configuration settings
 
 ### setup Guide
 
@@ -86,35 +107,3 @@ The following paragraphs describe concise each scripts functions.
 1. **`add_replication_to_replicator`**: Adds a replication job to the `_replicator` database, specifying the source, target, and whether the replication is continuous.
 
 2. **`start_replication_setup`**: Ensures the `_replicator` database exists on the CouchDB master instance and sets up bidirectional replication between the master and car1/car2 databases.
-
-#### config.sh
-
-Contains all the configuration details being used by the helper functions.
-
-## test data
-
-### CouchDB web UI
-
-#### Access the services:
-
-##### CouchDB Web Interface
-
-- Access the CouchDB web interface [couchdb-master](http://localhost:5984/_utils/#login).
-- Access the CouchDB web interface [car1](http://localhost:5985/_utils/#login).
-- Access the CouchDB web interface [car2](http://localhost:5986/_utils/#login).
-
-##### Prometheus UI
-
-- Access Prometheus at http://localhost:9090.
-
-##### Grafana UI
-
-- Access Grafana at http://localhost:3000 (default username: admin, password: adminpassword).
-
-#### Configure Grafana:
-
-Once in the Grafana UI, you'll need to set up Prometheus as a data source:
-
-- Go to Configuration -> Data Sources -> Add Data Source.
-- Select Prometheus and set the URL to http://prometheus:9090.
-- After adding the data source, you can create dashboards to visualize the metrics collected from CouchDB.

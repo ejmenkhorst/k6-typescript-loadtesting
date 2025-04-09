@@ -24,6 +24,8 @@ services:
       - couchdb-car1
       - couchdb-car2
     restart: "no"
+    volumes:
+      - ./.env:/app/.env
     networks:
       - couchdb-network
     environment:
