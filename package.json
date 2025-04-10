@@ -24,5 +24,7 @@
     "url": "https://github.com/ejmenkhorst/k6-typescript-loadtesting/issues"
   },
   "homepage": "https://github.com/ejmenkhorst/k6-typescript-loadtesting#readme",
-  "dependencies": {}
+  "devDependencies": {
+    "@types/k6": "^1.0.2"
+  }
 }
