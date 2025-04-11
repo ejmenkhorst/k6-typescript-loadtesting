@@ -121,5 +121,6 @@ npm run watch
 ### Execute testcases specified in [package.json](./package.json)
 
 ```bash
-npm run test:k6
+npm run test:car1
+npm run test:car2
 ```
