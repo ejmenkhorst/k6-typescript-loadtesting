@@ -110,7 +110,7 @@ The following paragraphs describe concise each scripts functions.
 
 ## Running K6 tests
 
-Invoke watch mode before making changes to test files
+Invoke watch mode before making changes to test files - this will automatically transpile the files to the **_dist_** folder.
 
 ### Enter watch mode when changing implementation of tests
 
@@ -119,6 +119,41 @@ npm run watch
 ```
 
 ### Execute testcases specified in [package.json](./package.json)
+
+#### Preparation steps before executing a load test
+
+##### Tweak the load test
+
+According to the type of loadtest you want to execute you might want to change a few parameters before executing it, this can be done in [src/options/optionsLoadTest.ts](./src/options/optionsLoadTest.ts)
+
+Eventually which options configuration you want to use during execution is configured in the [package.json](./package.json).
+
+```typescript
+// Example of a options configuration
+export const options = {
+  // Virtual users
+  vus: 1,
+  // Starting the duration and ramping it up slowly
+  startRate: 50,
+  stages: [
+    { target: 200, duration: "30s" }, // linearly go from 50 iters/s to 200 iters/s for 30s
+    { target: 500, duration: "0" }, // instantly jump to 500 iters/s
+    { target: 500, duration: "10m" }, // continue with 500 iters/s for 10 minutes
+  ],
+};
+```
+
+##### Transpile the loadtest
+
+In order to run the testcases they first need to be transpiled from TS to JS in the **_dist_** folder.
+
+```bash
+npx tsc
+```
+
+#### Run testcases for the different database instances
+
+Make sure the dist folder contains the latest version of changes you might have made.
 
 ```bash
 npm run test:car1

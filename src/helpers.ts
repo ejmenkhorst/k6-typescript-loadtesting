@@ -79,3 +79,13 @@ export function generateRandomLatitude(
 ): number {
   return Math.random() * (max - min) + min;
 }
+
+// Helper function during execution of load test
+export function logError(message: string): void {
+  console.error(`[ERROR]: ${message}`);
+}
+
+// Helper function during execution of load test
+export function logInfo(message: string): void {
+  console.log(`[INFO]: ${message}`);
+}

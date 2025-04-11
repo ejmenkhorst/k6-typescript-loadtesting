@@ -4,24 +4,21 @@ import {
   fetchDocumentRevision,
   updateDocument,
   generateRandomLatitude,
+  logError,
+  logInfo,
 } from "./helpers.js";
 
 const CAR_DB_URL = __ENV.DB_HOST;
 const DATABASE_NAME = __ENV.NEW_DB_NAME;
 const DOCUMENT_ID_CAR = __ENV.DOC_ID_CAR;
 
+// Dynamically import the options file based on the environment variable
+const optionsFile = __ENV.OPTIONS_FILE;
+
 export const options = {
   vus: 1,
   duration: "2s",
 };
-
-function logError(message: string): void {
-  console.error(`[ERROR]: ${message}`);
-}
-
-function logInfo(message: string): void {
-  console.log(`[INFO]: ${message}`);
-}
 
 export default function () {
   const url = `http://${CAR_DB_URL}/${DATABASE_NAME}/${DOCUMENT_ID_CAR}`;
