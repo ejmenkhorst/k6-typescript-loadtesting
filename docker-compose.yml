@@ -1,6 +1,6 @@
 services:
   couchdb-master:
-    image: couchdb:2.3.1
+    image: couchdb:3.4.3
     container_name: couchdb-master
     restart: always
     ports:
@@ -34,7 +34,7 @@ services:
       - COUCHDB_CAR2=${DB_CAR2}
 
   couchdb-car1:
-    image: couchdb:2.3.1
+    image: couchdb:3.4.3
     container_name: couchdb-car1
     restart: always
     ports:
@@ -51,7 +51,7 @@ services:
       - couchdb-network
 
   couchdb-car2:
-    image: couchdb:2.3.1
+    image: couchdb:3.4.3
     container_name: couchdb-car2
     restart: always
     ports:
