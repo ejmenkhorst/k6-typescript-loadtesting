@@ -4,7 +4,10 @@
   "description": "K6 loadtesting portfolio project",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "test:car1": "k6 run --env OPTIONS_FILE=optionsLoadTest --env DB_HOST=localhost:5985 --env DB_USER=admin --env DB_PASSWORD=9VQhWrfW --env NEW_DB_NAME=cars --env DOC_ID_CAR=doc_1 dist/test.js",
+    "test:car2": "k6 run --env OPTIONS_FILE=optionsLoadTest --env DB_HOST=localhost:5986 --env DB_USER=admin --env DB_PASSWORD=ouPFQ6mj --env NEW_DB_NAME=cars --env DOC_ID_CAR=doc_2 dist/test.js"
   },
   "repository": {
     "type": "git",
@@ -22,6 +25,8 @@
     "url": "https://github.com/ejmenkhorst/k6-typescript-loadtesting/issues"
   },
   "homepage": "https://github.com/ejmenkhorst/k6-typescript-loadtesting#readme",
-  "dependencies": {
+  "devDependencies": {
+    "@types/dotenv": "^6.1.1",
+    "@types/k6": "^1.0.2"
   }
 }

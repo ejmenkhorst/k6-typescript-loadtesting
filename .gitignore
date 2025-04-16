@@ -6,3 +6,6 @@
 db/master/
 db/car1/
 db/car2/
+
+node_modules/
+dist/
