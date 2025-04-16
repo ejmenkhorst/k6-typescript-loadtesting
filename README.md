@@ -2,13 +2,40 @@
 
 Portfolio project Grafana K6 load testing with TypeScript.
 
-## project setup
+## Table of Contents
+
+1. [Project Setup](#project-setup)
+   - [Prometheus Exporters](#prometheus-exporters)
+   - [Access the Services](#access-the-services)
+     - [CouchDB Web Interface](#couchdb-web-interface)
+     - [Prometheus UI](#prometheus-ui)
+     - [Grafana UI](#grafana-ui)
+   - [Folder Structure](#folder-structure)
+   - [Setup Guide](#setup-guide)
+2. [Init Scripts](#init-scripts)
+   - [initial-setup.sh Functions](#initial-setupsh-functions)
+   - [helpers.sh Functions](#helperssh-functions)
+   - [replicate.sh Functions](#replicatesh-functions)
+3. [Running K6 Tests](#running-k6-tests)
+   - [Enter Watch Mode](#enter-watch-mode-when-changing-implementation-of-tests)
+   - [Execute Testcases](#execute-testcases-specified-in-packagejson)
+     - [Preparation Steps](#preparation-steps-before-executing-a-load-test)
+     - [Tweak the Load Test](#tweak-the-load-test)
+     - [Transpile the Load Test](#transpile-the-loadtest)
+     - [Run Testcases](#run-testcases-for-the-different-database-instances)
+
+---
+
+## Project Setup
 
 This project is using several docker-containers to setup this project.
 It integrates Prometheus exporters with CouchDB instances, providing a clean and scalable monitoring solution.
 
-**prometheus exporters**  
-Benefits of This Approach:
+### Prometheus Exporters
+
+Prometheus exporters provide standardized metrics, scalability, and secure monitoring without direct CouchDB access, ensuring lightweight performance.
+
+Benefits of this approach:
 
 1. **Separation of Concerns**:
 
@@ -25,7 +52,7 @@ Benefits of This Approach:
 4. **Security**:
    - Prometheus does not need direct access to CouchDB credentials; it only communicates with the exporters.
 
-### Access the services:
+### Access the Services
 
 #### CouchDB Web Interface
 
@@ -46,7 +73,7 @@ The datasource configuration to prometheus can be found in the [datasources.yml]
 
 - Access Grafana at http://localhost:3000 (default username: admin, password: admin).
 
-### folder structure
+### Folder Structure
 
 - config folder: contains ini configuration files for couch-db instances
 - db folder: contains the database data -> remember to empty it manually if you want to start from scratch
@@ -54,13 +81,12 @@ The datasource configuration to prometheus can be found in the [datasources.yml]
 - grafana folder: contains the dashboards and datasources as code for a consistent experience
 - prometheus folder: contains the configuration settings
 
-### setup Guide
+### Setup Guide
 
 1. **Build Docker Image For Executing Shell Scripts:**
 
    ```bash
    docker build -t couchdb-bash-setup-image .
-
    ```
 
 2. **Initialise all containers**
@@ -69,12 +95,12 @@ The datasource configuration to prometheus can be found in the [datasources.yml]
    docker-compose up --build -d
    ```
 
-### init-scripts
+## Init Scripts
 
 The init-scripts folder is used by the init_couchdb container to setup the whole database setup including testdata and replication between instances.  
 The following paragraphs describe concise each scripts functions.
 
-#### initial-setup.sh functions
+### initial-setup.sh Functions
 
 1. **`wait_for_all_dbs`**: Ensures all CouchDB instances (master, car1, car2) are ready by calling wait_for_db for each instance.
 
@@ -88,7 +114,7 @@ The following paragraphs describe concise each scripts functions.
 
 6. **`main`**: Orchestrates the setup process by calling the above functions in sequence to initialize and configure the CouchDB environment.
 
-#### helpers.sh - functions
+### helpers.sh Functions
 
 1. **`wait_for_all_dbs`**: Ensures all CouchDB instances (master, car1, car2) are ready by calling `wait_for_db` for each instance.
 
@@ -102,27 +128,27 @@ The following paragraphs describe concise each scripts functions.
 
 6. **`insert_documents`**: Inserts a batch of test documents into the `cars` database on the CouchDB master instance using the `_bulk_docs` endpoint.
 
-#### replicate.sh - functions
+### replicate.sh Functions
 
 1. **`add_replication_to_replicator`**: Adds a replication job to the `_replicator` database, specifying the source, target, and whether the replication is continuous.
 
 2. **`start_replication_setup`**: Ensures the `_replicator` database exists on the CouchDB master instance and sets up bidirectional replication between the master and car1/car2 databases.
 
-## Running K6 tests
+## Running K6 Tests
 
 Invoke watch mode before making changes to test files - this will automatically transpile the files to the **_dist_** folder.
 
-### Enter watch mode when changing implementation of tests
+### Enter Watch Mode When Changing Implementation of Tests
 
 ```bash
 npm run watch
 ```
 
-### Execute testcases specified in [package.json](./package.json)
+### Execute Testcases Specified in [package.json](./package.json)
 
-#### Preparation steps before executing a load test
+#### Preparation Steps Before Executing a Load Test
 
-##### Tweak the load test
+##### Tweak the Load Test
 
 According to the type of loadtest you want to execute you might want to change a few parameters before executing it, this can be done in [src/options/optionsLoadTest.ts](./src/options/optionsLoadTest.ts)
 
@@ -143,7 +169,7 @@ export const options = {
 };
 ```
 
-##### Transpile the loadtest
+##### Transpile the Load Test
 
 In order to run the testcases they first need to be transpiled from TS to JS in the **_dist_** folder.
 
@@ -151,7 +177,7 @@ In order to run the testcases they first need to be transpiled from TS to JS in 
 npx tsc
 ```
 
-#### Run testcases for the different database instances
+#### Run Testcases for the Different Database Instances
 
 Make sure the dist folder contains the latest version of changes you might have made.
 
