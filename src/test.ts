@@ -8,17 +8,15 @@ import {
   logInfo,
 } from "./helpers.js";
 
+// Dynamically import the options file based on the environment variable
+const optionsFile = __ENV.OPTIONS_FILE || "optionsLoadTest"; // Default to optionsLoadTest
+const { options } = require(`./options/${optionsFile}.js`); // Dynamically load the options file
+
 const CAR_DB_URL = __ENV.DB_HOST;
 const DATABASE_NAME = __ENV.NEW_DB_NAME;
 const DOCUMENT_ID_CAR = __ENV.DOC_ID_CAR;
 
-// Dynamically import the options file based on the environment variable
-const optionsFile = __ENV.OPTIONS_FILE;
-
-export const options = {
-  vus: 1,
-  duration: "2s",
-};
+export { options }; // Export the dynamically loaded options
 
 export default function () {
   const url = `http://${CAR_DB_URL}/${DATABASE_NAME}/${DOCUMENT_ID_CAR}`;
@@ -31,15 +29,10 @@ export default function () {
 
   logInfo(`Document revision: ${revision}`);
 
-  // Set document ID
   const documentId = DOCUMENT_ID_CAR;
-  // Generate a random latitude
   const randomLatitude = generateRandomLatitude();
-
-  // Use the current time of execution as the car_name
   const currentTime = new Date().toISOString();
 
-  // Update the document
   const updated = updateDocument(
     url,
     documentId,
@@ -56,5 +49,5 @@ export default function () {
     logError("Failed to update the document.");
   }
 
-  sleep(1);
+  sleep(5);
 }
