@@ -1,6 +1,14 @@
 # Installation instructions RPI 4
 
-These installation instructions
+## Table of Contents
+
+1. [Installation on SD card](#installation-on-sd-card)
+   - [Change default settings](#change-default-settings)
+2. [Install software on RPI 4](#install-software-on-rpi-4)
+   - [Login to RPI via SSH](#1-login-to-rpi-via-ssh)
+   - [Install Docker](#2-install-docker)
+   - [Install Portainer](#3-install-portainer-server)
+   - [Install Prometheus Exporter](#4-install-prometheus-exporter)
 
 ## Installation on SD card
 
@@ -56,12 +64,10 @@ sudo usermod -aG docker pi
 sudo reboot
 ```
 
-### 3. Install Portainer
+### 3. Install Portainer Server
 
 Portainer is a GUI tool for managing docker containers  
 [Installation instructions Portainer CE version Linux](https://docs.portainer.io/start/install-ce/server/docker/linux)
-
-#### Portainer Server installation
 
 ```bash
 # Create the volume that Portainer Server will use to store its database
