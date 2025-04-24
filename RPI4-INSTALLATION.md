@@ -19,8 +19,9 @@
        - [Restart policy](#restart-policy)
        - [Runtime & resources](#runtime--resources)
 3. [Necessary adjustments](#necessary-adjustments)
-   - [Modify .env](#modify-env)
+   - [.env](#modify-env)
    - [Docker Compose](#docker-compose)
+   - [Package.json](#packagejson)
 
 ## Installation on SD card
 
@@ -97,7 +98,7 @@ docker run -d -p 8000:8000 -p 9443:9443 --name=portainer --restart=always -v /va
 
 After logging in successfully with your new admin user
 
-- Go to **Home** look at the **Environments** and **local** now you see you docker instance with all necesarry information.
+- Go to **Home** look at the **Environments** and **local** now you see your docker instance with all necessary information.
 
 ### 4. Install Prometheus Exporter
 
@@ -192,10 +193,19 @@ DB_CAR2=192.168.178.170:5986
 
 ### Docker Compose
 
-Make small adjustments to your docker-compose.yml file
+Make small adjustments to your [docker-compose.yml](docker-compose.yml) file
 
 ```yml
 # init-couchdb -> line 25: remove the reference to couchdb-car2
 
 # Remove the whole service couchdb-car2 -> this is now running on your Raspberry Pi
+```
+
+### Package.json
+
+Make small adjustments to your [package.json](package.json) file change the DB_HOST parameter with the IP of the Raspberry Pi
+
+```json
+  "scripts": {
+    "test:car2": "k6 run --env OPTIONS_FILE=optionsLoadTest --env DB_HOST=192.168.178.170:5986 --env DB_USER=admin --env DB_PASSWORD=ouPFQ6mj --env NEW_DB_NAME=cars --env DOC_ID_CAR=doc_2 dist/test.js"
 ```
