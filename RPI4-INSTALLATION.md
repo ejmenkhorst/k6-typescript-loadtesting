@@ -9,6 +9,18 @@
    - [Install Docker](#2-install-docker)
    - [Install Portainer](#3-install-portainer-server)
    - [Install Prometheus Exporter](#4-install-prometheus-exporter)
+   - [Install CouchDB via Portainer](#5-install-couchdb-via-portainer)
+     - [Create a new volume for database data](#create-a-new-volume-for-database-data)
+     - [Create a local.ini file on RPI](#create-a-localini-file-on-rpi)
+     - [Set up the CouchDB container](#set-up-the-couchdb-container)
+       - [Volumes](#volumes)
+       - [Network](#network)
+       - [Env](#env)
+       - [Restart policy](#restart-policy)
+       - [Runtime & resources](#runtime--resources)
+3. [Necessary adjustments](#necessary-adjustments)
+   - [Modify .env](#modify-env)
+   - [Docker Compose](#docker-compose)
 
 ## Installation on SD card
 
@@ -39,7 +51,7 @@ To use the RPI4 the following software listed below needs to be installed.
 
 ### 1. Login to RPI via SSH
 
-First login to your raspberry pi via SSH - I reccomend installing it via a LAN cable to your network your ISP might block port 22 by default on your router at home.
+First login to your Raspberry Pi via SSH - I recommend installing it via a LAN cable to your network your ISP might block port 22 by default on your router at home.
 
 ```bash
 # Find IP of your raspberry PI
@@ -83,13 +95,13 @@ docker run -d -p 8000:8000 -p 9443:9443 --name=portainer --restart=always -v /va
   - Go to: [https://raspberrypi.local:9443](https://raspberrypi.local:9443)
   - Create a new admin user and password
 
-After logging in succesfully with your new admin user
+After logging in successfully with your new admin user
 
 - Go to **Home** look at the **Environments** and **local** now you see you docker instance with all necesarry information.
 
 ### 4. Install Prometheus Exporter
 
-Exporter tool to get data from your raspberry pi, t0 monitor it and show it later via a Grafana dashboard
+Exporter tool to get data from your Raspberry Pi, to monitor it and show it later via a Grafana dashboard
 
 ```bash
 # Install prometheus-node-exporter
@@ -99,4 +111,91 @@ curl "http://localhost:9100/metrics"
 # Verify status
 sudo systemctl status prometheus-node-exporter
 
+```
+
+### 5. Install CouchDB via Portainer
+
+- Login to [portainer](https://raspberrypi.local:9443)
+
+- Download the following image:
+  - **couchdb:2.3.1**
+
+#### Create a new volume for database data
+
+- Create a new volume: **couchdb-data**
+
+#### Create a local.ini file on RPI
+
+For reading the configuration file with the settings we need to create a .ini file:
+
+```bash
+# SSH into the RPI
+ssh pi@192.168.178.170
+# Create a new directory on the RPI main volume
+mkdir couchdb-config
+# Create a .ini file
+nano car2.ini
+# Copy the same ini file from ./config/car2/local.ini
+# Exit nano with ctrl+x and save the file with filename: car2.ini
+```
+
+#### Set up the CouchDB container
+
+We are going to use the same configuration as Car 2 in our current docker-compose configuration:
+
+- Container name: **couchdb-car2**
+- Image: **couchdb:2.3.1**
+- Port mapping: Host: **5986** Container: **5984**
+
+##### Volumes
+
+- Volume: **Map** container path: **/opt/couchdb/data** to newly created volume **couchdb-data**
+- Volume: **Bind** container path: **/opt/couchdb/etc/local.d/local.ini** to host path **/home/pi/couchdb-config/car2.ini**
+
+##### Network
+
+- Network: **Bridge**
+- Hostname: **raspberrypi.local**
+
+##### Env
+
+Variables:
+
+- Name: **COUCHDB_URI** Value **http://admin:ouPFQ6mj@raspberrypi.local:5984**
+- Name: **COUCHDB_USER** Value **admin**
+- Name: **COUCHDB_PASSWORD** Value **ouPFQ6mj**
+
+##### Restart policy
+
+- Restart: Always
+
+##### Runtime & resources
+
+- Memory reservation: **256 MB**
+- Memory limit (MB): **256 MB**
+- Maximum CPU usage: **4 CPU**
+
+Press button **Deploy the container**
+
+After you press deploy container you should be able to access the DB via [http://raspberrypi.local:5986/](http://raspberrypi.local:5986/)  
+You can also access the CouchDB web interface [car2](http://raspberrypi.local:5986/_utils/#login) with the admin credentials provided in [car2.ini](./config/car2/local.ini).
+
+## Necessary adjustments
+
+### Modify .env
+
+Change the DB Car 2 container name to the IP address of your Raspberry Pi.
+
+```env
+DB_CAR2=192.168.178.170:5986
+```
+
+### Docker Compose
+
+Make small adjustments to your docker-compose.yml file
+
+```yml
+# init-couchdb -> line 25: remove the reference to couchdb-car2
+
+# Remove the whole service couchdb-car2 -> this is now running on your Raspberry Pi
 ```
