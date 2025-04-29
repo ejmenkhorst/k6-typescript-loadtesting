@@ -185,10 +185,11 @@ You can also access the CouchDB web interface [car2](http://raspberrypi.local:59
 
 ### Modify .env
 
-Change the DB Car 2 container name to the IP address of your Raspberry Pi.
+Change the DB Master and Car 2 container name to the IP address of your Raspberry Pi and Host for bidirectional communication with different Docker networks.
 
 ```env
-DB_CAR2=192.168.178.170:5986
+DB_MASTER= IP HOST:5984
+DB_CAR2= IP RPI:5986
 ```
 
 ### Docker Compose
