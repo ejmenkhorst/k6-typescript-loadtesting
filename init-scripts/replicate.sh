@@ -62,7 +62,7 @@ setup_replication_on_instance() {
   fi
 }
 
-# Function to set up replication for all instances
+# Function to set up replication for CAR1 and CAR2 only
 setup_replication() {
   # Ensure required environment variables are set
   if [[ -z "$DB_USER" || -z "$DB_PASSWORD_MASTER" || -z "$DB_PASSWORD_CAR1" || -z "$DB_PASSWORD_CAR2" || -z "$DB_MASTER" || -z "$DB_CAR1" || -z "$DB_CAR2" || -z "$NEW_DB_NAME" ]]; then
@@ -70,27 +70,26 @@ setup_replication() {
     exit 1
   fi
 
-  # Set up replication on couchdb-master
-  echo "Setting up replication on couchdb-master..."
-  setup_replication_on_instance "$DB_USER" "$DB_PASSWORD_MASTER" "$DB_MASTER"
-  add_replication_to_local_replicator "$DB_USER" "$DB_PASSWORD_MASTER" "$DB_MASTER" \
-    "http://$DB_USER:$DB_PASSWORD_MASTER@$DB_MASTER/$NEW_DB_NAME" \
-    "http://$DB_USER:$DB_PASSWORD_CAR1@$DB_CAR1/$NEW_DB_NAME" true
-  add_replication_to_local_replicator "$DB_USER" "$DB_PASSWORD_MASTER" "$DB_MASTER" \
-    "http://$DB_USER:$DB_PASSWORD_MASTER@$DB_MASTER/$NEW_DB_NAME" \
-    "http://$DB_USER:$DB_PASSWORD_CAR2@$DB_CAR2/$NEW_DB_NAME" true
-
   # Set up replication on couchdb-car1
   echo "Setting up replication on couchdb-car1..."
   setup_replication_on_instance "$DB_USER" "$DB_PASSWORD_CAR1" "$DB_CAR1"
   add_replication_to_local_replicator "$DB_USER" "$DB_PASSWORD_CAR1" "$DB_CAR1" \
     "http://$DB_USER:$DB_PASSWORD_CAR1@$DB_CAR1/$NEW_DB_NAME" \
     "http://$DB_USER:$DB_PASSWORD_MASTER@$DB_MASTER/$NEW_DB_NAME" true
+  add_replication_to_local_replicator "$DB_USER" "$DB_PASSWORD_CAR1" "$DB_CAR1" \
+    "http://$DB_USER:$DB_PASSWORD_MASTER@$DB_MASTER/$NEW_DB_NAME" \
+    "http://$DB_USER:$DB_PASSWORD_CAR1@$DB_CAR1/$NEW_DB_NAME" true
 
+
+  # Wait for a few seconds to ensure the first replication is set up
+  sleep 5
   # Set up replication on couchdb-car2
   echo "Setting up replication on couchdb-car2..."
   setup_replication_on_instance "$DB_USER" "$DB_PASSWORD_CAR2" "$DB_CAR2"
   add_replication_to_local_replicator "$DB_USER" "$DB_PASSWORD_CAR2" "$DB_CAR2" \
     "http://$DB_USER:$DB_PASSWORD_CAR2@$DB_CAR2/$NEW_DB_NAME" \
     "http://$DB_USER:$DB_PASSWORD_MASTER@$DB_MASTER/$NEW_DB_NAME" true
+  add_replication_to_local_replicator "$DB_USER" "$DB_PASSWORD_CAR2" "$DB_CAR2" \
+    "http://$DB_USER:$DB_PASSWORD_MASTER@$DB_MASTER/$NEW_DB_NAME" \
+    "http://$DB_USER:$DB_PASSWORD_CAR2@$DB_CAR2/$NEW_DB_NAME" true
 }
