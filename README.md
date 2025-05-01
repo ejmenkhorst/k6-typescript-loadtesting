@@ -130,9 +130,15 @@ The following paragraphs describe concise each scripts functions.
 
 ### replicate.sh Functions
 
-1. **`add_replication_to_replicator`**: Adds a replication job to the `_replicator` database, specifying the source, target, and whether the replication is continuous.
+1. **`add_replication_to_local_replicator`**: Adds a replication job to the `_replicator` database of a specific CouchDB instance.
 
-2. **`start_replication_setup`**: Ensures the `_replicator` database exists on the CouchDB master instance and sets up bidirectional replication between the master and car1/car2 databases.
+2. **`setup_replication_on_instance`**: Ensures the `_replicator` database exists on a specific CouchDB instance.
+
+3. **`setup_replication_instance`**: Ensures the `_replicator` database exists on the CouchDB master instance and sets up bidirectional replication between the master and car1/car2 databases.
+
+   - Master: Replicates the cars database to couchdb-car1 and couchdb-car2
+   - Car1: Replicates the the cars database back to couchdb-master
+   - Car2: Replicates the the cars database back to couchdb-master
 
 ## Running K6 Tests
 

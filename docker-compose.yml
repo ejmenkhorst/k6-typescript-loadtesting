@@ -22,7 +22,6 @@ services:
     depends_on:
       - couchdb-master
       - couchdb-car1
-      - couchdb-car2
     restart: "no"
     volumes:
       - ./.env:/app/.env
@@ -45,23 +44,6 @@ services:
     volumes:
       - ./db/car1:/opt/couchdb/data
       - ./config/car1/local.ini:/opt/couchdb/etc/local.ini
-    depends_on:
-      - couchdb-master
-    networks:
-      - couchdb-network
-
-  couchdb-car2:
-    image: couchdb:2.3.1
-    container_name: couchdb-car2
-    restart: always
-    ports:
-      - "5986:5984"
-    environment:
-      - COUCHDB_USER=${DB_USER}
-      - COUCHDB_PASSWORD=${DB_PASSWORD_CAR2}
-    volumes:
-      - ./db/car2:/opt/couchdb/data
-      - ./config/car2/local.ini:/opt/couchdb/etc/local.ini
     depends_on:
       - couchdb-master
     networks:

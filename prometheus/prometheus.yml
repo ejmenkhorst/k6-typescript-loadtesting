@@ -16,3 +16,8 @@ scrape_configs:
     static_configs:
       - targets:
           - "prometheus-exporter-car2:9984"
+
+  - job_name: "raspberry-pi"
+    static_configs:
+      - targets:
+          - "192.168.178.170:9100"

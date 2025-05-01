@@ -42,8 +42,8 @@ main() {
 
   # Start replication configuration setup if all databases are ready
   if [ $? -eq 0 ]; then
-    echo "All CouchDB databases are ready. Starting replication configuration setup..."
-    start_replication_setup
+    echo "All CouchDB databases are ready. Starting replication configuration setup via function: setup_replication..."
+    setup_replication
   else
     echo "One or more CouchDB databases failed to initialize. Replication configuration setup not started."
     exit 1
