@@ -7,7 +7,7 @@
     "build": "tsc",
     "watch": "tsc --watch",
     "test:car1": "k6 run --env OPTIONS_FILE=optionsLoadTest --env DB_HOST=localhost:5985 --env DB_USER=admin --env DB_PASSWORD=9VQhWrfW --env NEW_DB_NAME=cars --env DOC_ID_CAR=doc_1 dist/test.js",
-    "test:car2": "k6 run --env OPTIONS_FILE=optionsLoadTest --env DB_HOST=localhost:5986 --env DB_USER=admin --env DB_PASSWORD=ouPFQ6mj --env NEW_DB_NAME=cars --env DOC_ID_CAR=doc_2 dist/test.js"
+    "test:car2": "k6 run --env OPTIONS_FILE=optionsLoadTest --env DB_HOST=192.168.178.170:5986 --env DB_USER=admin --env DB_PASSWORD=ouPFQ6mj --env NEW_DB_NAME=cars --env DOC_ID_CAR=doc_2 dist/test.js"
   },
   "repository": {
     "type": "git",

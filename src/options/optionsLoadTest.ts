@@ -1,4 +1,4 @@
 export const options = {
   vus: 1,
-  duration: "30m",
+  duration: "60m",
 };
